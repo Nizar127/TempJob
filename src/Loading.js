@@ -7,40 +7,57 @@ import {
     Platform,
     StyleSheet,
     StatusBar,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
 import { firebase } from '@react-native-firebase/auth'
 import { Button, Icon } from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 import Onboarding from 'react-native-onboarding-swiper';
 console.disableYellowBox = true;
 
 
 
 export default class Loading extends Component {
+
+    addNewUserToFirestore = (user) => {
+        const collection = firestore().collection('users');
+        //const { display } = user.additionalUserInfo;
+        const details = {
+            displayName: user.displayName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            photoURL: user.photoURL,
+            userType: 'job_seeker',
+            createdDtm: firestore.FieldValue.serverTimestamp(),
+            lastLoginTime: firestore.FieldValue.serverTimestamp(),
+        };
+        console.log(userType, 'user_created');
+        collection.doc(user.uid).set(details);
+        return { user, details };
+    }
+
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
 
             setTimeout(() => {
                 if (user) {
-                    //     Alert.alert('Status', 'You are logged in.',
-                    //      [
-                    //         {
-                    //             text: "Start Hiring",
-                    //             onPress: () => this.props.navigation.navigate('Hire')
-                    //         },
-                    //         {
-                    //             text: "View Current Job Posted",
-                    //             onPress: () => this.props.navigation.navigate('MyJob')
-                    //         }
-                    //     ], { cancelable: false }
-                    // );
+
                     Alert.alert('Status', 'You are logged in.')
+
+                    firestore().collection('users').doc(user.uid).get().then(doc => {
+                        if (!doc.exists) {
+                            addNewUserToFirestore(user);
+                            console.log("onAuthStateChanged:User created::uid=" + user.uid)
+                        }
+                    });
+
                     this.props.navigation.navigate('Home');
                 }
                 else {
                     this.props.navigation.navigate('GoogleLogin');
                 }
-            }, 2000);
+            }, 1000);
 
         })
     }
@@ -53,36 +70,32 @@ export default class Loading extends Component {
                 pages={[
                     {
                         title: 'Hey!',
-                        subtitle: 'Welcome to $App!',
-                        backgroundColor: '#003c8f',
-                        image: (
-                            <Icon
-                                name="hand-peace-o"
-                                type="font-awesome"
-                                size={100}
-                                color="white"
-                            />
+                        subtitle: 'Welcome to App!',
+                        backgroundColor: '#003C8F',
+
+                        //backgroundColor: '#003c8f',
+                        image: (<Image source={require('./../src/img/makeup.jpg')} style={{ resizeMode: 'cover' }} />
+
                         ),
                     },
                     {
-                        title: 'Send Messages',
-                        subtitle: 'You can reach everybody with us',
-                        backgroundColor: '#5e92f3',
-                        image: (
-                            <Icon
-                                name="paper-plane-o"
-                                type="font-awesome"
-                                size={100}
-                                color="white"
-                            />
+                        title: 'Hey!',
+                        subtitle: 'Welcome to App!',
+                        backgroundColor: '#003C8F',
+
+                        //backgroundColor: '#003c8f',
+                        image: (<Image source={require('./../src/img/makeup.jpg')} style={{ resizeMode: 'cover' }} />
+
                         ),
                     },
                     {
-                        title: 'Get Notified',
-                        subtitle: 'We will send you notification as soon as something happened',
-                        backgroundColor: '#1565c0',
-                        image: (
-                            <Icon name="bell-o" type="font-awesome" size={100} color="white" />
+                        title: 'Hey!',
+                        subtitle: 'Welcome to App!',
+                        backgroundColor: '#003C8F',
+
+                        //backgroundColor: '#003c8f',
+                        image: (<Image source={require('./../src/img/makeup.jpg')} style={{ resizeMode: 'cover' }} />
+
                         ),
                     },
                     {

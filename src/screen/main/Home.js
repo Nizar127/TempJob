@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Share, BackHandler, LayoutAnimation, Image, Animated, Alert, FlatList, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Container, Header, TabHeading, View, Card, Tab, Form, Item, Input, CardItem, Label, Thumbnail, Text, Left, Body, Button, Right, Fab, Separator, Content, Footer, FooterTab } from 'native-base';
+import { Container, Header, TabHeading, View, Card, Tab, Form, Item, Input, CardItem, Label, Thumbnail, Text, Left, Body, Button, Right, Fab, Separator, Content, Footer, FooterTab, Textarea } from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
 import firestore from '@react-native-firebase/firestore';
 import firebase from '@react-native-firebase/app';
@@ -287,6 +287,7 @@ export default class Home extends Component {
             this.setState({ searchText: lowercase })
             querySnapshot.forEach(doc => {
                 searchList.push({
+                    key: doc.id,
                     jobname: doc.get('jobname'),
                     salary: doc.get('salary'),
                     url: doc.get('url'),
@@ -303,54 +304,128 @@ export default class Home extends Component {
         });
     }
 
-    showSearch() {
-        <View style={{ flex: 1, padding: 10, marginBottom: 10 }}>
 
-            <FlatList
-                data={this.state.searchList}
-                //contentContainerStyle={{ flexGrow: 1 }}
-                renderItem={({ item, index }) => {
-                    console.log('item', item);
-                    return (
-                        <View>
-                            {/* <Header style={{ backgroundColor: 'white' }}>
-                                <View style={{ marginTop: 13, marginEnd: 350 }}>
-                                    <Icon style={{ color: 'black' }} size={30} name="md-arrow-back" onPress={() => this.props.navigation.goBack()} />
-                                </View>
-                            </Header> */}
-                            <Card key={index} >
-                                <CardItem><Text style={{ fontStyle: 'bold', margin: 10, textAlign: 'center', textColor: 'green' }}>{item.worktype}</Text></CardItem>
-                                <CardItem cardBody bordered button onPress={() => this.props.navigation.navigate('FeedDetail', {
-                                    userkey: item.key
-                                })}>
-                                    <Image source={{ uri: item.url }} />
-                                </CardItem>
-                                <CardItem>
-                                    <Body>
-                                        <Text>{item.jobname}</Text>
-                                        <Text note>{item.jobCreatorName}</Text>
 
-                                    </Body>
-                                </CardItem>
-                                <CardItem>
-                                    <Text>RM  {item.salary}/job</Text>
-                                </CardItem>
-                                <CardItem style={{ justifyContent: 'center' }}>
+    FeedCallBack = () => {
+        <View style={{ flex: 1 }}>
 
-                                    <Button rounded primary onPress={() => { this.setState({ key: item.key }), this.displayModal(true) }}>
-                                        <Text>Apply Now</Text>
-                                    </Button>
-                                </CardItem>
-                            </Card>
-                        </View>
 
-                    )
-                }}
-            />
+            <Header searchBar rounded style={Style.searchBar}>
+                <Item>
+                    <Icon name="ios-search" />
+                    <Input placeholder="Search" onChangeText={value => this.setState({ searchText: value })} />
+                    <Button rounded onPress={this.onClickSearch}>
+                        <Text>Search</Text>
+                    </Button>
+                </Item>
+
+
+            </Header>
+
+
+
+            <Container>
+
+                <Text style={{ textAlign: "center", height: 40, fontWeight: "bold", marginTop: 10, fontSize: 23, fontFamily: "CerealMedium", elevation: 10 }}>List of Available Job</Text>
+
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.isVisible}
+                    onRequestClose={() => {
+                        Alert.alert('Modal has now been closed.');
+                    }}>
+
+                    <Thumbnail
+                        source={{ uri: this.state.profileImage }}
+                        style={Style.image} />
+
+
+                    <Item fixedLabel last>
+                        <Label> Describe Yourself</Label>
+                        <Textarea onChangeText={this.setSelfDescription} rowSpan={3} bordered style={Style.startTextBtn} placeholder="Tell something about the job Here" />
+
+
+                    </Item>
+
+                    <Item fixedLabel last>
+                        <Label>Related Skills</Label>
+                        <Input onChangeText={this.setSkills} />
+                    </Item>
+
+                    <Item fixedLabel last>
+                        <Label>Related Experience</Label>
+                        <Input onChangeText={this.setExperience} />
+                    </Item>
+
+
+                    <Text
+                        style={Style.closeText}
+                        onPress={() => {
+                            this.displayModal(!this.state.isVisible);
+                        }}><Icon name="md-close" size={50} />
+                    </Text>
+
+                    <Button success style={Style.addButton} onPress={() => this.sendApplication(this.state.key)}>
+                        <Text>Submit</Text>
+                    </Button>
+                </Modal>
+
+                <View style={{ flex: 1, padding: 10, marginBottom: 10 }}>
+
+
+                    <FlatList
+                        data={this.state.jobs}
+                        //contentContainerStyle={{ flexGrow: 1 }}
+                        renderItem={({ item, index }) => {
+                            return (
+
+                                <Card key={index} style={Style.listing}>
+                                    <CardItem><Text style={Style.text_title}>{item.worktype}</Text></CardItem>
+                                    <CardItem cardBody bordered button onPress={() => this.props.navigation.navigate('FeedDetail', {
+                                        userkey: item.key
+                                    })}>
+                                        <Image source={{ uri: item.url }} style={{ height: 200, width: null, flex: 1 }} />
+                                    </CardItem>
+                                    <CardItem style={{ flexDirection: 'row' }}>
+                                        <Body>
+                                            <Text style={Style.text_header}>{item.jobname}</Text>
+                                            <CardItem button bordered onPress={() => this.props.navigation.navigate('UserProfile')}>
+                                                <Text note style={Style.jobCreator}>{item.jobCreatorName}</Text>
+                                            </CardItem>
+                                        </Body>
+                                        <Button style={Style.startRouteBtn} onPress={this.onShare}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>Share</Text>
+                                        </Button>
+                                    </CardItem>
+                                    <CardItem style={Style.jobDesc}>
+                                        <Body>
+                                            <Text>{item.jobdesc}</Text>
+                                        </Body>
+                                    </CardItem>
+                                    <CardItem >
+                                        <Text style={Style.text_price}>RM  {item.salary}/job</Text>
+                                    </CardItem>
+                                    <CardItem style={{ justifyContent: 'center' }}>
+
+                                        <Button rounded primary onPress={() => { this.setState({ key: item.key }), this.displayModal(true) }}>
+                                            <Text style={{ fontWeight: 'bold', fontFamily: "CerealMedium" }}>Apply Now</Text>
+                                        </Button>
+                                    </CardItem>
+                                </Card>
+
+                            )
+                        }}
+                    />
+                </View>
+
+            </Container>
+            <Fab style={{ backgroundColor: '#f8f8fa', borderColor: '#000000' }} onPress={() => this.props.navigation.navigate('CarouselMap')}>
+
+                <Icon android name="md-compass" style={{ color: '#000000' }} />
+            </Fab>
         </View>
     }
-
-
 
     render() {
 
@@ -358,12 +433,11 @@ export default class Home extends Component {
             <>{!!this.state.searchList && this.state.searchList.length > 0 ?
                 (
 
-                    <View style={{ flex: 1, padding: 10, marginBottom: 10, color: 'black' }}>
+                    <View style={{ flex: 1, padding: 10, marginBottom: 10, backgroundColor: '#242836' }}>
                         <Header style={{ backgroundColor: 'white', padding: 5 }}>
                             {/* <View style={{ marginTop: 13, marginEnd: 350 }}> */}
                             <Left>
-                                <Icon style={{ color: 'black' }} size={30} name="md-arrow-back" onPress={() => this.props.navigation.goBack()} />
-
+                                {/*                                 <Icon style={{ color: 'black' }} size={30} name="md-arrow-back" /> */}<Button onPress={() => { this.setState({ key: this.state.key }), this.FeedCallBack }}><Text>Back to Feed</Text></Button>
                             </Left>
                             {/* </View> */}
                         </Header>
@@ -375,18 +449,22 @@ export default class Home extends Component {
                                 return (
 
                                     <Card key={index} >
-                                        <CardItem><Text style={{ fontStyle: 'bold', margin: 10, textAlign: 'center', textColor: 'green' }}>{item.worktype}</Text></CardItem>
+                                        <CardItem><Text style={Style.text_title}>{item.worktype}</Text></CardItem>
                                         <CardItem cardBody bordered button onPress={() => this.props.navigation.navigate('FeedDetail', {
                                             userkey: item.key
                                         })}>
-                                            <Image source={{ uri: item.url }} />
+                                            <Image source={{ uri: item.url }} style={{ height: 200, width: null, flex: 1 }} />
                                         </CardItem>
                                         <CardItem>
                                             <Body>
-                                                <Text>{item.jobname}</Text>
-                                                <Text note >{item.jobCreatorName}</Text>
-
+                                                <Text style={Style.text_header}>{item.jobname}</Text>
+                                                <CardItem style={{ width: 340, height: 50, borderTopWidth: 3, marginTop: 5, backgroundColor: '#DCDCDD' }} button bordered onPress={() => this.props.navigation.navigate('UserProfile')}>
+                                                    <Text note style={{ fontSize: 18, color: 'black', fontWeight: 'bold' }}>{item.jobCreatorName}</Text>
+                                                </CardItem>
                                             </Body>
+                                            <Button style={Style.startRouteBtn} onPress={this.onShare}>
+                                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Share</Text>
+                                            </Button>
                                         </CardItem>
                                         <CardItem>
                                             <Text>RM  {item.salary}/job</Text>
@@ -407,7 +485,7 @@ export default class Home extends Component {
                 )
                 : (
 
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, }}>
 
 
                         <Header searchBar rounded style={Style.searchBar}>
@@ -441,19 +519,19 @@ export default class Home extends Component {
                                     style={Style.image} />
 
 
-                                <Item fixedLabel last>
+                                <Item style={Style.inputGroup} fixedLabel last>
                                     <Label> Describe Yourself</Label>
-                                    <Input onChangeText={this.setSelfDescription} />
+                                    <Input style={Style.inputText} onChangeText={this.setSelfDescription} />
                                 </Item>
 
-                                <Item fixedLabel last>
+                                <Item style={Style.inputGroup} fixedLabel last>
                                     <Label>Related Skills</Label>
-                                    <Input onChangeText={this.setSkills} />
+                                    <Input style={Style.inputText} onChangeText={this.setSkills} />
                                 </Item>
 
-                                <Item fixedLabel last>
+                                <Item style={Style.inputGroup} fixedLabel last>
                                     <Label>Related Experience</Label>
-                                    <Input onChangeText={this.setExperience} />
+                                    <Input style={Style.inputText} onChangeText={this.setExperience} />
                                 </Item>
 
 
@@ -469,7 +547,7 @@ export default class Home extends Component {
                                 </Button>
                             </Modal>
 
-                            <View style={{ flex: 1, padding: 10, marginBottom: 10 }}>
+                            <View style={{ flex: 1, padding: 10, marginBottom: 10, backgroundColor: '#242836' }}>
 
 
                                 <FlatList
@@ -488,8 +566,8 @@ export default class Home extends Component {
                                                 <CardItem style={{ flexDirection: 'row' }}>
                                                     <Body>
                                                         <Text style={Style.text_header}>{item.jobname}</Text>
-                                                        <CardItem button bordered onPress={() => this.props.navigation.navigate('UserProfile')}>
-                                                            <Text note style={Style.jobCreator}>{item.jobCreatorName}</Text>
+                                                        <CardItem style={{ width: 340, height: 50, borderTopWidth: 3, marginTop: 5, backgroundColor: '#DCDCDD' }} button bordered onPress={() => this.props.navigation.navigate('UserProfile')}>
+                                                            <Text note style={{ fontSize: 18, color: 'black', fontWeight: 'bold' }}>{item.jobCreatorName}</Text>
                                                         </CardItem>
                                                     </Body>
                                                     <Button style={Style.startRouteBtn} onPress={this.onShare}>
@@ -576,6 +654,22 @@ const Style = StyleSheet.create({
         borderRadius: 35,
 
     },
+    inputText: {
+
+        backgroundColor: 'white',
+        height: 50,
+        width: 300,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 20,
+        borderWidth: 1,
+        borderColor: 'black',
+        shadowColor: 'black',
+        margin: 20,
+        elevation: 10,
+        margin: 10
+
+    },
     searchBar: {
         justifyContent: 'center',
         padding: 5,
@@ -656,7 +750,7 @@ const Style = StyleSheet.create({
         fontFamily: "CerealMedium",
         fontWeight: 'bold',
         fontSize: 18,
-        padding: 7
+        padding: 9
     },
     text_footer: {
         color: '#05375a',
@@ -704,6 +798,26 @@ const Style = StyleSheet.create({
         padding: 3,
         marginRight: 6,
         marginLeft: 6
+    },
+    startTextBtn: {
+        backgroundColor: 'white',
+        width: 200,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 20,
+        borderWidth: 1,
+        borderColor: 'grey',
+        shadowColor: 'black',
+        margin: 35,
+        elevation: 10
+    },
+    inputGroup: {
+        flex: 1,
+        padding: 0,
+        marginBottom: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: '#cccccc',
+        marginTop: 5
     },
     // image: {
     //     height: 150,
@@ -767,6 +881,7 @@ const Style = StyleSheet.create({
         color: 'black',
         opacity: 1.0
     },
+
     superhostLabel: {
         fontSize: 10,
         fontFamily: "CerealMedium",

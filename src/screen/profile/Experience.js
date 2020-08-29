@@ -3,12 +3,12 @@ import { StyleSheet, Alert, FlatList, View, Image, ActivityIndicator, ScrollView
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Container, Label, Card, CardItem, Content, Footer, FooterTab, Button, Text, Item, Input, Left, Right, Header, Body } from 'native-base';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+
 
 
 //let job = db.ref('/Job');
 
-export default class ViewProfile extends Component {
+export default class Experience extends Component {
   constructor() {
     super();
     this.state = {
@@ -21,57 +21,57 @@ export default class ViewProfile extends Component {
   }
 
 
-  // //function to add TextInput dynamically
-  // addTextInput = (index) => {
-  //   let textInput = this.state.textInput;
-  //   textInput.push(
-  //     <View key={index} style={{ flexDirection: 'row', margin: 5 }}>
-  //       <TextInput style={styles.startRouteBtn} onChangeText={(text) => this.addValues(text, index)} />
-  //       <Icon android name="md-remove" size={30} style={{ marginTop: 30 }} onPress={() => this.removeTextInput()} />
-  //     </View>
+  //function to add TextInput dynamically
+  addTextInput = (index) => {
+    let textInput = this.state.textInput;
+    textInput.push(
+      <View key={index} style={{ flexDirection: 'row', margin: 5 }}>
+        <TextInput style={styles.startRouteBtn} onChangeText={(text) => this.addValues(text, index)} />
+        <Icon android name="md-remove" size={30} style={{ marginTop: 30 }} onPress={() => this.removeTextInput()} />
+      </View>
 
-  //   );
-  //   this.setState({ textInput });
-  // }
+    );
+    this.setState({ textInput });
+  }
 
-  // //function to remove TextInput dynamically
-  // removeTextInput = () => {
-  //   let textInput = this.state.textInput;
-  //   let inputData = this.state.inputData;
-  //   textInput.pop();
-  //   inputData.pop();
-  //   this.setState({ textInput, inputData });
-  // }
+  //function to remove TextInput dynamically
+  removeTextInput = () => {
+    let textInput = this.state.textInput;
+    let inputData = this.state.inputData;
+    textInput.pop();
+    inputData.pop();
+    this.setState({ textInput, inputData });
+  }
 
-  // //function to add text from TextInputs into single array
-  // addValues = (text, index) => {
-  //   let dataArray = this.state.inputData;
-  //   let checkBool = false;
-  //   if (dataArray.length !== 0) {
-  //     dataArray.forEach(element => {
-  //       if (element.index === index) {
-  //         element.text = text;
-  //         checkBool = true;
-  //       }
-  //     });
-  //   }
-  //   if (checkBool) {
-  //     this.setState({
-  //       inputData: dataArray
-  //     });
-  //   }
-  //   else {
-  //     dataArray.push({ 'text': text, 'index': index });
-  //     this.setState({
-  //       inputData: dataArray
-  //     });
-  //   }
-  // }
+  //function to add text from TextInputs into single array
+  addValues = (text, index) => {
+    let dataArray = this.state.inputData;
+    let checkBool = false;
+    if (dataArray.length !== 0) {
+      dataArray.forEach(element => {
+        if (element.index === index) {
+          element.text = text;
+          checkBool = true;
+        }
+      });
+    }
+    if (checkBool) {
+      this.setState({
+        inputData: dataArray
+      });
+    }
+    else {
+      dataArray.push({ 'text': text, 'index': index });
+      this.setState({
+        inputData: dataArray
+      });
+    }
+  }
 
-  // //function to console the output
-  // getValues = () => {
-  //   console.log('Data', this.state.inputData);
-  // }
+  //function to console the output
+  getValues = () => {
+    console.log('Data', this.state.inputData);
+  }
 
 
 
@@ -85,51 +85,24 @@ export default class ViewProfile extends Component {
               <Icon style={{ color: 'black' }} size={30} name="md-arrow-back" onPress={() => this.props.navigation.goBack()} />
             </View>
           </Header>
-          <Card>
-            <CardItem cardBody>
-              <Image source={{ uri: auth().currentUser.photoURL }} style={{ height: 200, width: null, flex: 1 }} />
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>{auth().currentUser.displayName}</Text>
-              </Body>
-            </CardItem>
-
-          </Card>
-          <Card>
-            <CardItem header bordered>
-              <Text>About Us</Text>
-            </CardItem>
-            <CardItem cardBody bordered button>
-              <Body>
-                <Text style={{ margin: 30 }}>About You</Text>
-
-              </Body>
-            </CardItem>
-          </Card>
           <Item fixedLabel last style={{ marginTop: 20, marginBottom: 10 }}>
-            <Label style={styles.MainText}>Add BioGraphy</Label>
+            <Label style={styles.MainText}>Add Experience</Label>
           </Item>
           <Item fixedLabel last style={styles.row}>
-            <Input bordered style={styles.startRouteBtn} placeholder="Please Describe Yourself" />
+            <Input bordered style={styles.startRouteBtn} placeholder="Please State Your Destination" />
+            <Icon android name="md-add" size={30} onPress={() => this.addTextInput(this.state.textInput.length)} />
           </Item>
           {this.state.textInput.map((value) => {
             return value
           })}
 
 
+          <Button success style={styles.AddNewBtn} onPress={() => this.getValues()}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>Submit</Text>
+          </Button>
 
 
         </Container>
-
-        <Footer style={{ padding: 5 }}>
-          <View>
-            <Button onPress={() => this.props.navigation.navigate('UpdateProfile')}>
-              <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white' }}>Update Profile</Text>
-            </Button>
-          </View>
-
-        </Footer>
       </ScrollView>
     );
   }
@@ -188,8 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 20,
     marginTop: 30,
-    marginLeft: 100,
-    marginBottom: 150
+    marginLeft: 100
   },
   startRouteBtn: {
     backgroundColor: 'white',

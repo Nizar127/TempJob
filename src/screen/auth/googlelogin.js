@@ -14,13 +14,14 @@ import {
     statusCodes
 } from '@react-native-community/google-signin'
 import { WEB_CLIENT_ID } from './utils/keys'
-import { firebase } from '@react-native-firebase/auth'
+//import { firebase } from '@react-native-firebase/auth'
+import firebase from '@react-native-firebase/app';
 import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
-
+import firestore from '@react-native-firebase/firestore';
 
 export default function GoogleLogin() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -28,8 +29,29 @@ export default function GoogleLogin() {
     const [error, setError] = useState(null)
     //const { colors } = useTheme();
 
+    // useEffect(() => {
+    //     configureGoogleSign()
+    // }, [])
+
     useEffect(() => {
         configureGoogleSign()
+
+        // firebase.auth().onAuthStateChanged(user => {
+        //     if (user) {
+        //         Alert.alert('Status', 'You are logged in.')
+
+        //         firestore().collection('users').doc(user.uid).get().then(doc => {
+        //             if (!doc.exists) {
+        //                 addNewUserToFirestore(user);
+        //                 console.log("onAuthStateChanged:User created::uid=" + user.uid)
+        //             }
+        //         });
+        //         this.props.navigation.navigate('Home');
+        //     }
+        //     else {
+        //         this.props.navigation.navigate('GoogleLogin');
+        //     }
+        // })
     }, [])
 
     configureGoogleSign = () => {
@@ -102,33 +124,37 @@ export default function GoogleLogin() {
 
     addNewUserToFirestore = (user) => {
         const collection = firestore().collection('users');
-        const { profile } = user.additionalUserInfo;
+        //const { display } = user.additionalUserInfo;
         const details = {
-            firstName: profile.given_name,
-            lastName: profile.family_name,
-            fullName: profile.name,
-            email: profile.email,
-            picture: profile.picture,
+            displayName: user.displayName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            photoURL: user.photoURL,
+            description: '',
+            mainskills: '',
+            skills: '',
+            experience: '',
+            achievement: '',
+            interest: '',
+            project: '',
+            money_collect: '',
+            job_done: '',
+            current_job: '',
+            incoming_job: '',
+            paymentMethod: '',
+            education: '',
             createdDtm: firestore.FieldValue.serverTimestamp(),
             lastLoginTime: firestore.FieldValue.serverTimestamp(),
+            userType: 'Job_Seeker',
         };
-        collection.doc(auth().currentUser.uid).set(details);
+        collection.doc(user.uid).set(details);
         return { user, details };
     }
 
-    // startWork = () => {
-    //     if (signIn()) {
-    //         Alert.alert('Lets Go')
-    //         this.props.navigation.navigate('Home')
-    //     } else {
-    //         Alert.alert('Something Wrong')
-    //     }
 
-
-    // }
-
-    startWork = async () => {
-        const user = await signIn();
+    StartWork = async () => {
+        console.log("StartWork", user)
+        const user = await signIn()
         if (user) {
             Alert.alert('Lets Go')
             this.props.navigation.navigate('Home')
@@ -138,6 +164,18 @@ export default function GoogleLogin() {
 
 
     }
+
+    // StartWork = async () => {
+    //     const user = await signIn();
+    //     if (user) {
+    //         Alert.alert('Lets Go')
+    //         this.props.navigation.navigate('Home')
+    //     } else {
+    //         Alert.alert('Something Wrong')
+    //     }
+
+
+    // }
 
     signOut = async () => {
         try {
@@ -162,7 +200,7 @@ export default function GoogleLogin() {
                     style={styles.signIn}
                     size={GoogleSigninButton.Size.Wide}
                     color={GoogleSigninButton.Color.Dark}
-                    onPress={() => startWork()}
+                    onPress={() => StartWork()}
                 />
 
 
@@ -277,6 +315,3 @@ const styles = StyleSheet.create({
     }
 
 })
-
-
-

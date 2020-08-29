@@ -8,7 +8,7 @@ import {
   View,
   Card,
   Right,
-  auto,
+  Label,
   CardItem,
   Thumbnail,
   Text,
@@ -25,7 +25,9 @@ import {
 } from 'native-base';
 //import  ActionSheet from 'react-native-actionsheet';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import Contact from '../profile/Contact';
+import Reward from '../profile/Reward';
+import Resume from './Project';
 
 export default class UserProfile extends Component {
 
@@ -34,58 +36,74 @@ export default class UserProfile extends Component {
     super(props);
 
 
-    showActionSheet = () => {
-      this.ActionSheet.show()
-    }
+    // showActionSheet = () => {
+    //   this.ActionSheet.show()
+    // }
 
-    handlePress = (buttonIndex) => {
-      this.setState({ selected: buttonIndex })
-    }
+    // handlePress = (buttonIndex) => {
+    //   this.setState({ selected: buttonIndex })
+    // }
   }
 
   render() {
     return (
       <Container>
         <ScrollView>
-          <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, width: null }} >
-            <CardItem>
-
-              <Text style={{ justifyContent: 'center', marginTop: 20 }}>
-                Profile
-                    </Text>
-
-            </CardItem>
+          <Header style={{ backgroundColor: 'white' }}>
+            <View style={{ marginTop: 13, marginEnd: 350 }}>
+              <Icon style={{ color: 'black' }} size={30} name="md-arrow-back" onPress={() => this.props.navigation.goBack()} />
+            </View>
+          </Header>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }} >
             <CardItem style={{ marginTop: 5 }} >
               <Thumbnail large source={require('../../img/kambing.jpg')} style={{ alignSelf: 'center' }} />
             </CardItem>
             <CardItem>
-              <Text>James Corden</Text>
+              <Text style={{ elevation: 10, fontWeight: 'bold', fontFamily: "CerealMedium", fontSize: 20 }}>nizar ahmad fakhrul</Text>
             </CardItem>
             <CardItem>
-              <Text note><Icon name="md-pin" size={30} /> Kuala Terengganu, Malaysia</Text>
+              <Text note><Icon name="md-pin" style={{ color: 'red' }} size={30} /> Kuala Terengganu, Malaysia</Text>
             </CardItem>
-            <CardItem style={{ justifyContent: 'center', margin: 30 }}>
-              <Button rounded
-                onPress={() => this.props.navigation.navigate('Calendar')}
-                style={{
-                  backgroundColor: '#f5f5f5',
-                  color: 'black',
-                  fontSize: 10,
-                  shadowColor: 'black',
-                  shadowOpacity: 0.3
-                }}
-              >
-                <Text style={{ color: 'black' }}>
-                  View Availability
-                               </Text>
+            <Card style={{ flexDirection: 'column' }}>
+              <View style={Style.infoBoxWrapper}>
+                <View style={Style.infoBox}>
+                  <Label style={Style.text}>Job Posted</Label>
+                </View>
+                <View style={Style.infoBox}>
+                  <Label style={Style.text}>Applicants</Label>
+                </View>
+                <View style={Style.infoBox}>
+                  <Label style={Style.text}>Company Type</Label>
+                </View>
+              </View>
+              <View style={Style.infoBoxWrapper}>
+                <View style={Style.infoBox}>
+                  <Label style={Style.textInfo}>100</Label>
+                </View>
+                <View style={Style.infoBox}>
+                  <Label style={Style.textInfo}>50</Label>
+                </View>
+                <View style={Style.infoBox}>
+                  <Label style={Style.textInfo}>System Integrator</Label>
+                </View>
+              </View>
+            </Card>
 
-              </Button>
-            </CardItem>
           </View>
           <ScrollView>
-            <View style={{ marginTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch' }}>
+            <View style={{ backgroundColor: 'white', flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'stretch' }}>
 
-
+              <Tabs tabBarUnderlineStyle={{ backgroundColor: '#000000' }} tabBarUnderlineStyle={{ borderBottomWidth: 2 }}>
+                <Tab tabStyle={{ backgroundColor: '#2f2483' }} heading={<TabHeading style={{ justifyContent: 'space-between', color: 'white' }}><Text> Job Complete</Text></TabHeading>}>
+                  <Reward />
+                </Tab>
+                <Tab tabStyle={{ backgroundColor: 'red' }} heading={<TabHeading><Text> OnGoing Job</Text></TabHeading>}>
+                  <Resume />
+                </Tab>
+                <Tab tabStyle={{ backgroundColor: 'red' }} heading={<TabHeading><Text>Availabilty</Text></TabHeading>}>
+                  <Contact />
+                </Tab>
+              </Tabs>
             </View>
           </ScrollView>
 
@@ -104,3 +122,40 @@ export default class UserProfile extends Component {
   }
 }
 
+const Style = StyleSheet.create({
+
+  tab: {
+    color: 'white',
+    textShadowColor: 'black'
+  },
+  infoBoxWrapper: {
+
+    borderTopColor: '#000000',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    height: 70,
+    marginBottom: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  infoBox: {
+    width: '33%',
+    alignItems: 'center',
+    color: 'black',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    padding: 4
+  },
+  text: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    fontFamily: 'montserrat'
+  },
+  textInfo: {
+    color: '#2B18FD',
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'montserrat'
+
+  }
+})

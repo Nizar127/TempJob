@@ -188,10 +188,11 @@ export default class CarouselMap extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#3046F2'
   },
   map: {
-    height: 300,
+    height: 330,
     width: Dimensions.get('window').width,
     //...StyleSheet.absoluteFillObject
   },
@@ -201,17 +202,20 @@ const styles = StyleSheet.create({
     marginBottom: 25
   },
   cardContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    height: 200,
-    width: 220,
+    //backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: '#242836',
+    height: 240,
+    width: 250,
     padding: 24,
     borderRadius: 24
   },
   cardImage: {
     height: 120,
-    width: 220,
-    bottom: 0,
+    width: 250,
+    top: 80,
+    //bottom: 0,
     position: 'absolute',
+    //position: 'absolute',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20
   },
@@ -224,11 +228,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 15,
     fontWeight: 'bold',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 5
   },
   cardType: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 19,
     alignSelf: 'center'
   }
 });

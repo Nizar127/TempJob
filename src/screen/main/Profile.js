@@ -1,182 +1,3 @@
-// import React, { Component } from 'react';
-// import { StyleSheet, ScrollView, Image, FlatList } from 'react-native';
-// import {
-//     Container,
-//     Header,
-//     Content,
-//     View,
-//     Card,
-//     Right,
-//     auto,
-//     CardItem,
-//     Thumbnail,
-//     Text,
-//     Left,
-//     Body,
-//     List,
-//     ListItem,
-//     Separator,
-//     Footer,
-//     Switch,
-//     Button
-// } from 'native-base';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import firestore from '@react-native-firebase/firestore';
-// import auth from '@react-native-firebase/auth';
-// import { firebase } from '@react-native-firebase/auth';
-// import { Alert } from 'react-native';
-
-
-
-// export default class Profile extends Component {
-
-//     constructor() {
-//         super();
-//         this.userRef = firestore().collection('User');
-//         this.state = {
-//             users: [],
-//             username: '',
-//             phonenumber: '',
-//             keyplayer: '',
-//             uniqueId: '',
-//             jobdesc: '',
-//             photo: '',
-//             url: '',
-//             uid: '',
-//             username: '',
-//             email: '',
-//             phoneNumber: '',
-//             profileImage: '',
-//             status: 'job_seeker',
-//             imageType: '',
-//             worktype: '',
-//             salary: '',
-//             peoplenum: '',
-//             time: 0,
-//             lat: 0,
-//             lng: 0,
-//             location: '',
-//             show: true,
-//             //listViewData: data,
-//             newContact: "",
-//             mytext: '',
-
-//             isModalVisible: false,
-//             inputText: '',
-//             editedItem: 0,
-
-//         };
-
-//         // const user = firebase.auth().currentUser;
-//         // user.providerData.forEach((userInfo) => {
-//         //     console.log('User info for provider: ', userInfo);
-//         // });
-
-//         // if (user == null) {
-
-//         //     //set status to job seeker
-//         //     let Jobstatus = this.state.status;
-//         //     firebase.firestore().collection('Users').doc(user.uid).set({
-//         //         uid: user.uid,
-//         //         username: user.email,
-//         //         email: user.email,
-//         //         phoneNumber: user.phoneNumber,
-//         //         profileImage: user.photoURL,
-//         //         status: Jobstatus
-//         //     }).then(() => {
-//         //         firebase.firestore().collection('Users')
-//         //             .doc(user.uid)
-//         //             .where('status', '=', 'job_seeker')
-//         //             .get()
-//         //             .then(data => { console.log(data) })
-//         //     });
-//         // } else {
-//         //     console.log('Data Already Exist');
-//         //     //Alert.alert('Data already exist');
-//         // }
-
-//     }
-
-
-//     componentDidMount() {
-//         //SplashScreen.hide();
-//         this.unsubscribe = this.userRef.onSnapshot(this.getCollection);
-
-//     }
-
-//     componentWillUnmount() {
-//         this.unsubscribe();
-
-//     }
-
-
-
-//     getCollection = (querySnapshot) => {
-//         const jobs = [];
-//         querySnapshot.forEach((res) => {
-//             const { uid, username, email, phoneNumber, profileImage } = res.data();
-//             jobs.push({
-//                 key: res.id,
-//                 res,
-//                 uid,
-//                 username,
-//                 email,
-//                 phoneNumber,
-//                 profileImage,
-
-//             });
-//         });
-//         this.setState({
-//             jobs,
-//             isLoading: false
-//         })
-//     }
-
-//     static navigationOptions = {
-//         title: 'Profile',
-//         tabBarIcon: ({ tintColor }) => (
-//             <Icon name="md-person" style={{ color: tintColor }} size={20} />
-//         ),
-//         headerTitle: {
-//             title: 'GET-THE-JOB'
-//         },
-//         headerStyle: {
-//             backgroundColor: '#f45fff',
-//         },
-//         headerTintColor: '#fff',
-//         headerTitleStyle: {
-//             fontWeight: 'bold',
-//         },
-//     }
-
-//     render() {
-//         return (
-
-
-
-
-//         );
-//     }
-// }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         backgroundColor: '#fff',
-//         justifyContent: 'center',
-//         paddingTop: 10,
-//         paddingBottom: 10
-//     },
-//     listitem: {
-//         fontFamily: 'Montserrat-Regular',
-//         fontSize: 15,
-
-//     }
-
-// });
-
-
 import React, { Component } from 'react';
 import {
     StyleSheet, ScrollView, Image, FlatList,
@@ -203,7 +24,9 @@ import {
     Button,
     Switch,
     Footer,
-    FooterTab
+    FooterTab,
+    Label
+
 } from 'native-base';
 import auth from '@react-native-firebase/auth';
 //import firebase from '../config/firebase'
@@ -224,28 +47,28 @@ export default class Profile extends Component {
         super();
 
 
-        const user = firebase.auth().currentUser;
-        user.providerData.forEach((userInfo) => {
-            console.log('User info for provider: ', userInfo);
-        });
+        // const user = firebase.auth().currentUser;
+        // user.providerData.forEach((userInfo) => {
+        //     console.log('User info for provider: ', userInfo);
+        // });
 
-        //if user dh wujud, just alert
-        if (user == null) {
-            firebase.firestore().collection('Users').doc(user.uid).set({
-                uid: user.uid,
-                username: user.email,
-                email: user.email,
-                phoneNumber: user.phoneNumber,
-                profileImage: user.photoURL
-            }).then(() => {
-                firebase.firestore().collection('Users').doc(user.uid).get().then(data => { console.log(data) })
-            });
-        } else {
-            console.log('Data Already Exist');
-            //Alert.alert('Data already exist');
-        }
+        // //if user dh wujud, just alert
+        // if (user == null) {
+        //     firebase.firestore().collection('Users').doc(user.uid).set({
+        //         uid: user.uid,
+        //         username: user.email,
+        //         email: user.email,
+        //         phoneNumber: user.phoneNumber,
+        //         profileImage: user.photoURL
+        //     }).then(() => {
+        //         firebase.firestore().collection('Users').doc(user.uid).get().then(data => { console.log(data) })
+        //     });
+        // } else {
+        //     console.log('Data Already Exist');
+        //     //Alert.alert('Data already exist');
+        // }
 
-        this.initData = user
+        // this.initData = user
 
 
         //firebase.firestore().collection('Users').doc(user.uid).set(user).collection('Job_Creator');
@@ -282,36 +105,36 @@ export default class Profile extends Component {
 
     }
 
-    componentDidMount() {
-        this.unsubscribe = firebase.firestore().collection('Users').onSnapshot(this.getCollection);
-    }
+    // componentDidMount() {
+    //     this.unsubscribe = firebase.firestore().collection('Users').onSnapshot(this.getCollection);
+    // }
 
 
-    componentWillUnmount() {
-        this.unsubscribe();
-    }
+    // componentWillUnmount() {
+    //     this.unsubscribe();
+    // }
 
     //get the data first
-    getCollection = (querySnapshot) => {
-        const users = [];
-        querySnapshot.forEach((res) => {
-            const { username, phonenumber, profileImage, description, keyplayer, project } = res.data();
-            users.push({
-                key: res.id,
-                res,
-                username,
-                phonenumber,
-                profileImage,
-                description,
-                keyplayer,
-                project,
-            });
-        });
-        this.setState({
-            users,
-            isLoading: false
-        })
-    }
+    // getCollection = (querySnapshot) => {
+    //     const users = [];
+    //     querySnapshot.forEach((res) => {
+    //         const { username, phonenumber, profileImage, description, keyplayer, project } = res.data();
+    //         users.push({
+    //             key: res.id,
+    //             res,
+    //             username,
+    //             phonenumber,
+    //             profileImage,
+    //             description,
+    //             keyplayer,
+    //             project,
+    //         });
+    //     });
+    //     this.setState({
+    //         users,
+    //         isLoading: false
+    //     })
+    // }
 
     setModalVisible = (bool) => {
         this.setState({ isModalVisible: bool })
@@ -372,163 +195,188 @@ export default class Profile extends Component {
 
     render() {
         return (
-            this.state.users.map((item, index) => {
-                return (
-                    <View key={index}>
-                        <ScrollView>
-                            <Card>
-                                <CardItem cardBody>
-                                    <Left>
-                                        <Thumbnail source={{ uri: auth().currentUser.photoURL }} style={{ height: 80, width: 80, margin: 10, padding: 10 }} />
-                                    </Left>
-                                    <Body>
-                                        <Text style={{ margin: 10 }}>{auth().currentUser.displayName}</Text>
-                                    </Body>
-                                    <Button style={{ alignItems: 'center' }} transparent onPress={() => this.props.navigation.navigate('ViewProfile')} ><Text>View Profile</Text></Button>
-                                </CardItem>
-                            </Card>
+            // this.state.users.map((item, index) => {
+            //     return (
+            <View /* key={index} */ >
+                <ScrollView>
+                    <Card>
+                        <CardItem cardBody>
+                            <Left>
+                                <Thumbnail source={{ uri: auth().currentUser.photoURL }} style={{ height: 80, width: 80, margin: 10, padding: 10 }} />
+                            </Left>
+                            <Body>
+                                <Text style={{ margin: 10 }}>{auth().currentUser.displayName}</Text>
+                            </Body>
+                            <Button style={{ alignItems: 'center' }} transparent onPress={() => this.props.navigation.navigate('ViewProfile')} ><Text>View Profile</Text></Button>
+                        </CardItem>
+                    </Card>
 
-
-                            <Card style={{ height: auto }}>
-                                <CardItem cardBody>
-                                    <Content>
-                                        <Separator>
-                                            <Text style={{ fontSize: 20, justifyContent: 'center' }}>Account Settings</Text>
-                                        </Separator>
-                                        <List style={styles.listitem}>
-                                            <ListItem onPress={() => this.props.navigation.navigate('Personal')}>
-                                                <Left><Text>Personal Information</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-person" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('Resume')}>
-                                                <Left><Text>Resume</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-briefcase" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('PaymentSetting')}>
-                                                <Left><Text>Payments</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-wallet" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('Privacy')}>
-                                                <Left><Text>Privacy</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-wallet" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem>
-                                                <Left>
-                                                    <Body>
-                                                        <Text>Print Receipt</Text>
-                                                        <Text note>Toggle to Switch Auto or Manual</Text>
-                                                    </Body>
-                                                </Left>
-                                                <Right>
-                                                    <Switch selected={true} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem>
-                                                <Left><Text>Rewards</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-cash" size={40} />
-                                                </Right>
-                                            </ListItem>
-                                        </List>
-                                        <Separator bordered>
-                                            <Text>Multi-Skills Working</Text>
-                                        </Separator>
-                                        <List style={styles.listitem}>
-                                            <ListItem onPress={() => this.props.navigation.navigate('PersonalSkill')}>
-                                                <Left><Text>List Your Skills</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-person" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('JobType')}>
-                                                <Left><Text>Job Type</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-briefcase" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('WorkSkill')}>
-                                                <Left style={{ flexDirection: 'column' }}><Text>Learn About Multi-Skills Workforce</Text><Text note>Earn Up to RM 3,000 per month</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-cash" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                        </List>
-                                        <Separator>
-                                            <Text style={{ fontSize: 20, justifyContent: 'center' }}>Support</Text>
-                                        </Separator>
-                                        <List >
-                                            <ListItem onPress={() => this.props.navigation.navigate('Support')}>
-                                                <Left>
-                                                    <View style={{ flexDirection: 'column' }}>
-                                                        <Text>Safety Centre</Text>
-                                                        <Text note>Get the Support you need as well as Labor Union help</Text>
-                                                    </View>
-                                                </Left>
-                                                <Right>
-                                                    <Icon active name="md-person" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('Contact')}>
-                                                <Left><Text>Get Help</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-briefcase" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('PaymentMethod')}>
-                                                <Left><Text>Please Give Us Your Feedback</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-wallet" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                        </List>
-                                        <Separator>
-                                            <Text style={{ fontSize: 20, justifyContent: 'center' }}>Legal</Text>
-                                        </Separator>
-                                        <List style={styles.listitem}>
-                                            <ListItem onPress={() => this.props.navigation.navigate('Terms')}>
-                                                <Left><Text>Terms of Service</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-person" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                            <ListItem onPress={() => this.props.navigation.navigate('Privacy')}>
-                                                <Left><Text>Privacy Policy</Text></Left>
-                                                <Right>
-                                                    <Icon active name="md-briefcase" size={30} />
-                                                </Right>
-                                            </ListItem>
-                                        </List>
-
-                                    </Content>
-                                </CardItem>
-                            </Card>
-
-                            <Card>
-                                <Footer style={{ padding: 5 }}>
-                                    <View>
-                                        <Text style={styles.footerText}>Developed by Ahmad Fakhrul Nizar Bin Ab Ghani</Text>
-                                        <Text style={styles.footerText}>All Right Reserved</Text>
-                                    </View>
-
-                                </Footer>
-
-                            </Card>
-
-
-                        </ScrollView>
-
+                    <View style={styles.infoBoxWrapper}>
+                        <View style={[styles.infoBox, {
+                            borderRightColor: '#dddddd',
+                            borderRightWidth: 1
+                        }]}>
+                            <Label>RM 1000</Label>
+                            <Text>Money Collected</Text>
+                        </View>
+                        <View style={styles.infoBox}>
+                            <Label>12</Label>
+                            <Text>Job</Text>
+                        </View>
                     </View>
-                )
+                    <Card style={{ height: auto }}>
+                        <CardItem cardBody>
+                            <Content>
+                                <Separator>
+                                    <Text style={styles.separator}>Account Settings</Text>
+                                </Separator>
+                                <List style={styles.listitem}>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Personal')}>
+                                        <Left><Text>Personal Information</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-person" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('PaymentScreen')}>
+                                        <Left><Text>Add Payments</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-wallet" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Privacy')}>
+                                        <Left><Text>Privacy</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-wallet" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Left>
+                                            <Body>
+                                                <Text>Print Receipt</Text>
+                                                <Text note>Toggle to Switch Auto or Manual</Text>
+                                            </Body>
+                                        </Left>
+                                        <Right>
+                                            <Switch selected={true} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Left><Text>Rewards</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-cash" size={40} />
+                                        </Right>
+                                    </ListItem>
+                                </List>
+                                <Separator>
+                                    <Text style={styles.separator}>Resume</Text>
+                                </Separator>
+                                <List style={styles.listitem}>
+                                    <ListItem onPress={() => this.props.navigation.navigate('PersonalSkill')}>
+                                        <Left><Text>Skills</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-person" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Experience')}>
+                                        <Left><Text>Experience</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Project')}>
+                                        <Left><Text>Personal Project</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Education')}>
+                                        <Left><Text>Education Background</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Interest')}>
+                                        <Left><Text>Interest</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Achievement')}>
+                                        <Left><Text>Achievement</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
 
-            })
+                                </List>
+                                <Separator>
+                                    <Text style={styles.separator}>Support</Text>
+                                </Separator>
+                                <List >
+                                    <ListItem onPress={() => this.props.navigation.navigate('Support')}>
+                                        <Left>
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text>Safety Centre</Text>
+                                                <Text note>Get the Support you need as well as Labor Union help</Text>
+                                            </View>
+                                        </Left>
+                                        <Right>
+                                            <Icon active name="md-person" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Contact')}>
+                                        <Left><Text>Get Help</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('PaymentMethod')}>
+                                        <Left><Text>Please Give Us Your Feedback</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-wallet" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                </List>
+                                <Separator>
+                                    <Text style={{ fontSize: 20, justifyContent: 'center' }}>Legal</Text>
+                                </Separator>
+                                <List style={styles.listitem}>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Terms')}>
+                                        <Left><Text>Terms of Service</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-person" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                    <ListItem onPress={() => this.props.navigation.navigate('Privacy')}>
+                                        <Left><Text>Privacy Policy</Text></Left>
+                                        <Right>
+                                            <Icon active name="md-briefcase" size={30} />
+                                        </Right>
+                                    </ListItem>
+                                </List>
+
+                            </Content>
+                        </CardItem>
+                    </Card>
+
+                    <Card>
+                        <Footer style={{ padding: 5 }}>
+                            <View>
+                                <Text style={styles.footerText}>Developed by Ahmad Fakhrul Nizar Bin Ab Ghani</Text>
+                                <Text style={styles.footerText}>All Right Reserved</Text>
+                            </View>
+
+                        </Footer>
+
+                    </Card>
+
+
+                </ScrollView>
+
+            </View>
+            //     )
+
+            // })
         )
     }
 }
@@ -562,6 +410,13 @@ const styles = StyleSheet.create({
     },
     marginLeft: {
         marginLeft: 5,
+    },
+    separator: {
+        fontSize: 20,
+        fontFamily: "CerealMedium",
+        alignItems: 'center',
+        color: 'black',
+        margin: 5
     },
     menu: {
         width: 20,
@@ -602,155 +457,20 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular',
         fontSize: 15,
 
-    }
+    },
+    infoBoxWrapper: {
+        borderBottomColor: '#dddddd',
+        borderBottomWidth: 2,
+        borderTopColor: '#dddddd',
+        borderTopWidth: 2,
+        flexDirection: 'row',
+        height: 100,
+    },
+    infoBox: {
+        width: '50%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white'
+    },
 })
 
-
-
-
-
-
-
-
-
-
-//  <ScrollView> 
-
-
-//  <Card>
-
-//  </Card>
-//  <Card>
-//      <Container>
-//          <Content style={{ padding: 15 }}>
-            //  <Separator>
-            //      <Text style={{ fontSize: 20, justifyContent: 'center' }}>Account Settings</Text>
-            //  </Separator>
-            //  <List style={styles.listitem}>
-            //      <ListItem onPress={() => this.props.navigation.navigate('Personal')}>
-            //          <Left><Text>Personal Information</Text></Left>
-            //          <Right>
-            //             <Icon active name="md-person" size={30} />
-            //          </Right>
-            //      </ListItem>
-            //      <ListItem onPress={() => this.props.navigation.navigate('Resume')}>
-            //          <Left><Text>Resume</Text></Left>
-            //          <Right>
-            //              <Icon active name="md-briefcase" size={30} />
-            //          </Right>
-            //      </ListItem>
-            //      <ListItem onPress={() => this.props.navigation.navigate('PaymentSetting')}>
-            //          <Left><Text>Payments</Text></Left>
-            //          <Right>
-            //              <Icon active name="md-wallet" size={30} />
-            //          </Right>
-            //      </ListItem>
-            //      <ListItem onPress={() => this.props.navigation.navigate('Privacy')}>
-            //          <Left><Text>Privacy Settings</Text></Left>
-            //          <Right>
-            //              <Icon active name="md-unlock" size={30} />
-            //          </Right>
-            //      </ListItem>
-            //      <ListItem>
-            //          <Left>
-            //              <Body>
-            //                  <Text>Print Receipt</Text>
-            //                  <Text note>Toggle to Switch Auto or Manual</Text>
-            //              </Body>
-            //          </Left>
-            //          <Right>
-            //              <Switch selected={true} />
-            //          </Right>
-            //      </ListItem>
-            //      <ListItem>
-            //          <Left><Text>Rewards</Text></Left>
-            //          <Right>
-            //              <Icon active name="md-cash" size={30} />
-            //          </Right>
-            //      </ListItem>
-            //  </List>
-
-            // <Separator>
-            //     <Text style={{ fontSize: 20, justifyContent: 'center' }}>Multi-Skills Workforce</Text>
-            // </Separator>
-            // <List style={styles.listitem}>
-            //     <ListItem onPress={() => this.props.navigation.navigate('PersonalSkill')}>
-            //         <Left><Text>List Your Skills</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-person" size={30} />
-            //         </Right>
-            //     </ListItem>
-            //     <ListItem onPress={() => this.props.navigation.navigate('JobType')}>
-            //         <Left><Text>Job Type</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-briefcase" size={30} />
-            //         </Right>
-            //     </ListItem>
-            //     <ListItem onPress={() => this.props.navigation.navigate('WorkSkill')}>
-            //         <Left><Text>Learn About Multi-Skills Workforce</Text><Text note>Earn Up to RM 3,000 per month</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-cash" size={30} />
-            //         </Right>
-            //     </ListItem>
-
-            // </List>
-            // <Separator>
-            //     <Text style={{ fontSize: 20, justifyContent: 'center' }}>Support</Text>
-            // </Separator>
-            // <List style={styles.listitem}>
-            //     <ListItem onPress={() => this.props.navigation.navigate('Support')}>
-            //         <Left><Text>Safety Centre</Text><Text note>Get the Support you need as well as Labor Union help</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-person" size={30} />
-            //         </Right>
-            //     </ListItem>
-            //     <ListItem onPress={() => this.props.navigation.navigate('Contact')}>
-            //         <Left><Text>Get Help</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-briefcase" size={30} />
-            //         </Right>
-            //     </ListItem>
-            //     <ListItem onPress={() => this.props.navigation.navigate('PaymentMethod')}>
-            //         <Left><Text>Please Give Us Your Feedback</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-wallet" size={30} />
-            //         </Right>
-            //     </ListItem>
-            // </List>
-            // <Separator>
-            //     <Text style={{ fontSize: 20, justifyContent: 'center' }}>Legal</Text>
-            // </Separator>
-            // <List style={styles.listitem}>
-            //     <ListItem onPress={() => this.props.navigation.navigate('Terms')}>
-            //         <Left><Text>Terms of Service</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-person" size={30} />
-            //         </Right>
-            //     </ListItem>
-            //     <ListItem onPress={() => this.props.navigation.navigate('Privacy')}>
-            //         <Left><Text>Privacy Policy</Text></Left>
-            //         <Right>
-            //             <Icon active name="md-briefcase" size={30} />
-            //         </Right>
-            //     </ListItem>
-//             </List>
-//             <List>
-//                 <ListItem onPress={() => this.props.navigation.navigate('Logout')}>
-//                     <Left><Text>Logout</Text></Left>
-//                 </ListItem>
-//             </List>
-//         </Content>
-//     </Container>
-// </Card>
-
-// <Footer style={{ paddingTop: 50 }}>
-//     <Content>
-//         <Text>Developed by Ahmad Fakhrul Nizar Bin Ab Ghani</Text>
-//         <Text>All Right Reserved</Text>
-//     </Content>
-// </Footer>
-
-
-
-
-// </ScrollView> 

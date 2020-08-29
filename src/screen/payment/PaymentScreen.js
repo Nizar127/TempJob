@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { Header, Container } from 'native-base';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Button from './components/Button';
 import stripe from 'tipsi-stripe';
 stripe.setOptions({
@@ -46,28 +48,36 @@ export default class PaymentScreen extends PureComponent {
         const { loading, token } = this.state
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.header}>
-                    Add Card Here
+            <Container>
+                <Header style={{ backgroundColor: 'white' }}>
+                    <View style={{ marginTop: 13, marginEnd: 350 }}>
+                        <Icon style={{ color: 'black' }} size={30} name="md-arrow-back" onPress={() => this.props.navigation.goBack()} />
+                    </View>
+                </Header>
+                <View style={styles.container}>
+
+                    <Text style={styles.header}>
+                        Add Card Here
           </Text>
-                <Text style={styles.instruction}>
-                    Click button to show Card Form dialog.
+                    <Text style={styles.instruction}>
+                        Click button to show Card Form dialog.
           </Text>
-                <Button
-                    text="Enter you card and pay"
-                    loading={loading}
-                    onPress={this.handleCardPayPress}
-                />
-                <View
-                    style={styles.token}
-                >
-                    {token &&
-                        <Text style={styles.instruction}>
-                            Token: {token.tokenId}
-                        </Text>
-                    }
+                    <Button
+                        text="Enter you card and pay"
+                        loading={loading}
+                        onPress={this.handleCardPayPress}
+                    />
+                    <View
+                        style={styles.token}
+                    >
+                        {token &&
+                            <Text style={styles.instruction}>
+                                Token: {token.tokenId}
+                            </Text>
+                        }
+                    </View>
                 </View>
-            </View>
+            </Container>
         )
     }
 }
