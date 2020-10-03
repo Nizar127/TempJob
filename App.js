@@ -148,12 +148,21 @@ const DashboardStackNavigator = createStackNavigator(
 const CustomDrawerContentComponent = (props) => (
   <SafeAreaView style={{ flex: 1 }}>
     <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
+      <Thumbnail source={{ uri: auth().currentUser.photoURL }} style={{ height: 80, width: 80, margin: 10, padding: 10 }} />
+      {/* <Thumbnail source={require('./src/img/chef.png')} style={{ height: 120, width: 120, borderRadius: 60 }} /> */}
+
 
     </View>
     <View style={{ justifyContent: 'center', alignItems: 'center', fontSize: 20, fontWeight: 'bold' }}>
       <Text style={{ justifyContent: 'center', alignItems: 'center', fontSize: 20, fontWeight: 'bold' }}>
+        {auth().currentUser.displayName}
+
 
       </Text>
+      {/* <Text style={{ justifyContent: 'center', alignItems: 'center', fontSize: 20, fontWeight: 'bold' }}>
+
+        Kerol
+    </Text> */}
     </View>
     <View>
       <DrawerItems {...props} />
