@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Container, Header, TabHeading, View, DeckSwiper, Fab, Card, Tab, Tabs, CardItem, Thumbnail, Text, Left, Body, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Agenda } from 'react-native-calendars';
 import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
 //import { fromBinary } from 'uuid-js';
 //import Modal from "react-native-modal";
@@ -16,6 +17,7 @@ export default class Calendar extends Component {
         this.jobAcceptRef = firestore().collection('Job_Hired').where('jobSeekerID', '==', auth().currentUser.uid);
         this.state = {
             items: {},
+            Agenda: {},
             active: false,
             isModalVisible: false,
             events:
@@ -39,10 +41,53 @@ export default class Calendar extends Component {
     //   Alert.alert('Floating Button Clicked');
     // };
 
+
+
     componentDidMount() {
         //SplashScreen.hide();
-        this.unsubscribe = this.jobAcceptRef.onSnapshot(this.getCollection);
+        //this.unsubscribe = this.jobAcceptRef.onSnapshot(this.getCollection);
+    this.unsubscribe = firebase.firestore().collection('Job_Hired').onSnapshot(doc => {
+      //console.log(doc.docs);
+      let A = [];
+      let agendaTask = {};
+      doc.forEach(e => {
+       const data = e.data();
+       const startdate = new Date(data.startDate);
+       let key_startData = startdate.getFullYear() + '-' + (startdate.getMonth() + 1 ) + '-';
+       if(startdate.getDate() < 10){
+           key_startData += "0" + startdate.getDate()
+       }else{
+           key_startData += startdate.getDate()
+       }
+       let array = agendaTask[key_startData]
+       if(!array){
+            array = []
+       }
+       array.push({
+         name: data.jobname,
+         task: data.task,
+         to_do_list: data.task,
+ 
+       })
+       agendaTask[key_startData] = array
 
+      })
+      console.log("AgendaTask: ",agendaTask)
+      this.setState({
+        // Agenda: {
+        //     //for format purposes
+        //     //create agenda
+        //     //check state , check array of the date
+            
+        //     "2020-12-25" : A
+        // }
+
+        Agenda: agendaTask
+      })
+
+      
+
+  });
 
     }
 
@@ -51,37 +96,37 @@ export default class Calendar extends Component {
     }
 
 
-    getCollection = (querySnapshot) => {
-        const jobs = [];
-        querySnapshot.forEach((res) => {
-            const { jobName, jobCreatorID, jobDescription, jobSeekerID, job_creator_Image, job_creator_name, job_seekerImage, lat, lng, job_seekerSalary, location, task, time, type_of_Job, startDate, endDate } = res.data();
-            jobs.push({
-                key: res.id,
-                res,
-                jobName,
-                jobCreatorID,
-                jobDescription,
-                jobSeekerID,
-                job_creator_Image,
-                job_creator_name,
-                job_seekerImage,
-                lat,
-                lng,
-                job_seekerSalary,
-                location,
-                task,
-                time,
-                type_of_Job,
-                startDate,
-                endDate
+    // getCollection = (querySnapshot) => {
+    //     const jobs = [];
+    //     querySnapshot.forEach((res) => {
+    //         const { jobName, jobCreatorID, jobDescription, jobSeekerID, job_creator_Image, job_creator_name, job_seekerImage, lat, lng, job_seekerSalary, location, task, time, type_of_Job, startDate, endDate } = res.data();
+    //         jobs.push({
+    //             key: res.id,
+    //             res,
+    //             jobName,
+    //             jobCreatorID,
+    //             jobDescription,
+    //             jobSeekerID,
+    //             job_creator_Image,
+    //             job_creator_name,
+    //             job_seekerImage,
+    //             lat,
+    //             lng,
+    //             job_seekerSalary,
+    //             location,
+    //             task,
+    //             time,
+    //             type_of_Job,
+    //             startDate,
+    //             endDate
 
-            });
-        });
-        this.setState({
-            jobs,
-            isLoading: false
-        })
-    }
+    //         });
+    //     });
+    //     this.setState({
+    //         jobs,
+    //         isLoading: false
+    //     })
+    // }
 
     events = () => {
         this.setState(
@@ -118,13 +163,19 @@ export default class Calendar extends Component {
             <Container>
                 <Container>
 
-
-
                     <Agenda
-                        items={this.events}
+                    items={this.state.Agenda}
+                    // items={{
+                    //     '2020-12-22': [{name: 'item 1 - any js object', task: 'Create new item', to_do_list:'do great'}],
+                    //     '2020-12-23': [{name: 'item 1 - any js object', task: 'Create new item', to_do_list:'do great'}],
+                    //     '2020-12-24': [],
+                    //     '2020-12-25': [{name: 'item 1 - any js object', task: 'Create new item', to_do_list:'do great'}]
+                    //   }}
+                        // items={this.events}
                         loadItemsForMonth={this.loadItems.bind(this)}
                         selected={new Date()}
                         //markedDates={{this.startDate}}
+                       
                         renderItem={this.renderItem.bind(this)}
                         renderEmptyDate={this.renderEmptyDate.bind(this)}
                         rowHasChanged={this.rowHasChanged.bind(this)}
@@ -148,10 +199,10 @@ export default class Calendar extends Component {
                     //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
                     />
                 </Container>
-                <Fab style={{ backgroundColor: '#66cd00' }} onPress={() => this.props.navigation.navigate('addjob')}>
+                {/* <Fab style={{ backgroundColor: '#66cd00' }} onPress={() => this.props.navigation.navigate('addjob')}>
 
                     <Icon android name="md-add" ios name="ios-add" />
-                </Fab>
+                </Fab> */}
 
             </Container>
         );
@@ -187,7 +238,15 @@ export default class Calendar extends Component {
 
     renderItem(item) {
         return (
-            <View style={[styles.item, { height: item.height }]}><Text>{item.name}</Text></View>
+            <View style={[styles.item, { height: item.height }]}>
+
+                <Text>{item.name}</Text>
+                <Text>{item.task}</Text>
+              
+                <Text>{item.to_do_list}</Text>
+                
+        
+            </View>
         );
     }
 

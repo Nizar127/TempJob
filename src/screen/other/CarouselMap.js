@@ -14,6 +14,9 @@ import MapView,
 import { request, PERMISSIONS } from 'react-native-permissions';
 import Geolocation from '@react-native-community/geolocation';
 import Carousel from 'react-native-snap-carousel';
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
+//import { firebase } from '@react-native-firebase/auth';
 
 export default class CarouselMap extends Component {
 
@@ -24,19 +27,51 @@ export default class CarouselMap extends Component {
   state = {
     markers: [],
     coordinates: [
-      { name: 'Programmers', payment: 'RM 20/hour', type: 'Contract', latitude: 3.098790, longitude: 101.644920, image: require('../../img/coding.jpg') },
-      { name: 'Project Manager', payment: 'RM 500', type: 'Freelance', latitude: 3.149943, longitude: 101.660357, image: require('../../img/project_manager.jpg') },
-      { name: 'Office Temp Work', payment: 'RM 1200/month', type: 'Part-Time', latitude: 3.130880, longitude: 101.679604, image: require('../../img/startup_culture.jpg') },
-      { name: 'Manual Labor', payment: 'RM 100/hour', type: 'Hire-As-Needed', latitude: 3.182166, longitude: 101.678381, image: require('../../img/labour.jpg') },
-      { name: 'Restaurant Waiter', payment: 'RM 40/hour', type: 'Urgent', latitude: 3.140173, longitude: 101.662588, image: require('../../img/waiter.jpg') },
-      { name: 'Restaurant Waiter', payment: 'RM 2500', type: 'Per Milestones', latitude: 3.056733, longitude: 101.585121, image: require('../../img/waiter.jpg') },
+      { name: 'Programmers', payment: 'RM 20/hour', type: 'Contract', latitude: 3.098790, longitude: 101.644920, image: "https://localhost"/* require('../../img/coding.jpg')  */},
+      // { name: 'Project Manager', payment: 'RM 500', type: 'Freelance', latitude: 3.149943, longitude: 101.660357, image: require('../../img/project_manager.jpg') },
+      // { name: 'Office Temp Work', payment: 'RM 1200/month', type: 'Part-Time', latitude: 3.130880, longitude: 101.679604, image: require('../../img/startup_culture.jpg') },
+      // { name: 'Manual Labor', payment: 'RM 100/hour', type: 'Hire-As-Needed', latitude: 3.182166, longitude: 101.678381, image: require('../../img/labour.jpg') },
+      // { name: 'Restaurant Waiter', payment: 'RM 40/hour', type: 'Urgent', latitude: 3.140173, longitude: 101.662588, image: require('../../img/waiter.jpg') },
+      // { name: 'Restaurant Waiter', payment: 'RM 2500', type: 'Per Milestones', latitude: 3.056733, longitude: 101.585121, image: require('../../img/waiter.jpg') },
 
     ]
   }
 
   componentDidMount() {
+
+
     this.requestLocationPermission();
+
+    this.unsubscribe = firebase.firestore().collection('Job_list').onSnapshot(doc => {
+      //console.log(doc.docs);
+      let A = [];
+      doc.forEach(e => {
+       const data = e.data();
+       A.push({
+         name: data.jobname,
+         payment: data.salary,
+         type:data.worktype,
+         latitude: data.lat,
+         longitude: data.lng,
+         image: data.url
+       })
+
+      })
+      console.log("A: ",A)
+      this.setState({
+        coordinates: A
+      })
+
+      
+
+  });
   }
+
+
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
 
   showWelcomeMessage = () =>
     Alert.alert(
@@ -117,9 +152,10 @@ export default class CarouselMap extends Component {
   renderCarouselItem = ({ item }) =>
     <View style={styles.cardContainer}>
       <Text style={styles.cardTitle}>{item.name}</Text>
-      <Image style={styles.cardImage} source={item.image} />
+      <Image  style={styles.cardImage} source={{uri: item.image}} />
       <Text style={styles.cardType}>{item.type}</Text>
       <Text style={styles.cardPayment}>{item.payment}</Text>
+      {/* <Text style={styles.cardPayment}>{item.image}</Text> */}
 
     </View>
 
@@ -171,6 +207,7 @@ export default class CarouselMap extends Component {
 
 
         </MapView>
+        {!!this.state.coordinates && this.state.coordinates.length > 0 && (
         <Carousel
           ref={(c) => { this._carousel = c; }}
           data={this.state.coordinates}
@@ -181,6 +218,8 @@ export default class CarouselMap extends Component {
           removeClippedSubviews={false}
           onSnapToItem={(index) => this.onCarouselItemChange(index)}
         />
+        )
+     }
       </View>
     );
   }
@@ -204,15 +243,15 @@ const styles = StyleSheet.create({
   cardContainer: {
     //backgroundColor: 'rgba(0, 0, 0, 0.6)',
     backgroundColor: '#242836',
-    height: 240,
+    height: 300,
     width: 250,
     padding: 24,
     borderRadius: 24
   },
   cardImage: {
-    height: 120,
+    height: 130,
     width: 250,
-    top: 80,
+    top: 120,
     //bottom: 0,
     position: 'absolute',
     //position: 'absolute',
@@ -236,5 +275,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 19,
     alignSelf: 'center'
+  },
+  testImg:{
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'cover',
   }
 });
