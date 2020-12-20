@@ -49,28 +49,40 @@ export default class Calendar extends Component {
     this.unsubscribe = firebase.firestore().collection('Job_Hired').onSnapshot(doc => {
       //console.log(doc.docs);
       let A = [];
+      let agendaTask = {};
       doc.forEach(e => {
        const data = e.data();
-       A.push({
+       const startdate = new Date(data.startDate);
+       let key_startData = startdate.getFullYear() + '-' + (startdate.getMonth() + 1 ) + '-';
+       if(startdate.getDate() < 10){
+           key_startData += "0" + startdate.getDate()
+       }else{
+           key_startData += startdate.getDate()
+       }
+       let array = agendaTask[key_startData]
+       if(!array){
+            array = []
+       }
+       array.push({
          name: data.jobname,
          task: data.task,
          to_do_list: data.task,
-        //  type:data.worktype,
-        //  latitude: data.lat,
-        //  longitude: data.lng,
-        //  image: data.url
+ 
        })
+       agendaTask[key_startData] = array
 
       })
-      console.log("A: ",A)
+      console.log("AgendaTask: ",agendaTask)
       this.setState({
-        Agenda: {
-            //for format purposes
-            //create agenda
-            //check state , check array of the date
+        // Agenda: {
+        //     //for format purposes
+        //     //create agenda
+        //     //check state , check array of the date
             
-            "2020-12-25" : A
-        }
+        //     "2020-12-25" : A
+        // }
+
+        Agenda: agendaTask
       })
 
       
